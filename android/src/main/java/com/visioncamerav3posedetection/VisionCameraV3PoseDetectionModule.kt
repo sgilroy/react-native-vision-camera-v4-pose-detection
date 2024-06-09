@@ -1,6 +1,7 @@
 package com.visioncamerav3posedetection
 
 import android.media.Image
+import android.view.Surface
 import com.facebook.react.bridge.WritableNativeMap
 import com.google.android.gms.tasks.Task
 import com.google.android.gms.tasks.Tasks
@@ -9,10 +10,10 @@ import com.google.mlkit.vision.pose.Pose
 import com.google.mlkit.vision.pose.PoseDetection
 import com.google.mlkit.vision.pose.PoseLandmark
 import com.google.mlkit.vision.pose.defaults.PoseDetectorOptions
-import com.mrousavy.camera.frameprocessor.Frame
-import com.mrousavy.camera.frameprocessor.FrameProcessorPlugin
-import com.mrousavy.camera.frameprocessor.VisionCameraProxy
-import com.mrousavy.camera.types.Orientation
+import com.mrousavy.camera.frameprocessors.Frame
+import com.mrousavy.camera.frameprocessors.FrameProcessorPlugin
+import com.mrousavy.camera.frameprocessors.VisionCameraProxy
+import com.mrousavy.camera.core.types.Orientation
 import java.util.HashMap
 
 class VisionCameraV3PoseDetectionModule(proxy : VisionCameraProxy, options: Map<String, Any>?): FrameProcessorPlugin() {
@@ -27,7 +28,21 @@ class VisionCameraV3PoseDetectionModule(proxy : VisionCameraProxy, options: Map<
       val poseDetector = PoseDetection.getClient(options.build())
       val mediaImage: Image = frame.image
       val orientation: Orientation = frame.orientation
-      val image = InputImage.fromMediaImage(mediaImage, orientation.toDegrees())
+      val surfaceRotation = orientation.toSurfaceRotation()
+
+      fun surfaceRotationToDegrees(value: Int): Int = 
+        when (value) {
+          Surface.ROTATION_0 -> 0
+          Surface.ROTATION_270 -> 270
+          Surface.ROTATION_180 -> 180
+          Surface.ROTATION_90 -> 90
+          else -> 0
+        }
+
+      val image = InputImage.fromMediaImage(
+        mediaImage, 
+        surfaceRotationToDegrees( surfaceRotation )
+      )
       val task: Task<Pose> = poseDetector.process(image)
       val pose: Pose = Tasks.await(task)
       val map = WritableNativeMap()
