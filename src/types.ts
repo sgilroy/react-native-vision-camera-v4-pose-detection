@@ -1,8 +1,9 @@
 import type { CameraProps } from 'react-native-vision-camera';
 export type {
+  DrawableFrameProcessor,
   Frame,
-  FrameProcessor,
   FrameProcessorPlugin,
+  ReadonlyFrameProcessor,
 } from 'react-native-vision-camera';
 
 export type PoseType = {

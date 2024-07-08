@@ -13,7 +13,7 @@ const LINKING_ERROR: string =
   '- You are not using Expo Go\n';
 
 const plugin: FrameProcessorPlugin | undefined =
-  VisionCameraProxy.initFrameProcessorPlugin('detectPose');
+  VisionCameraProxy.initFrameProcessorPlugin('detectPose', {});
 
 export function detectPose(frame: Frame, options: PoseDetectionOptions): any {
   'worklet';
