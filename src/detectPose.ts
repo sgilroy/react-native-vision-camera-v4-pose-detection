@@ -15,7 +15,7 @@ const LINKING_ERROR: string =
 const plugin: FrameProcessorPlugin | undefined =
   VisionCameraProxy.initFrameProcessorPlugin('detectPose', {});
 
-export function detectPose(frame: Frame, options: PoseDetectionOptions): any {
+export function detectPose(frame: Frame, options?: PoseDetectionOptions): any {
   'worklet';
   if (plugin == null) throw new Error(LINKING_ERROR);
   // @ts-ignore
