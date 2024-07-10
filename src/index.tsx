@@ -12,6 +12,9 @@ import type {
   DrawableFrameProcessor,
 } from './types';
 
+export { detectPose } from './detectPose';
+export type { PoseType } from './types';
+
 export const Camera = forwardRef(function Camera(
   props: CameraTypes,
   ref: ForwardedRef<any>
